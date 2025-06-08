@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhawani Shankar Borana | Web Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        .skill-bar {
+            transition: width 1.5s ease-in-out;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .project-card {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .section {
+            opacity: 0;
+        }
+        
+        .section.visible {
+            opacity: 1;
+            transition: opacity 0.8s ease;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 text-gray-800">
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-800 text-white py-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-black opacity-20"></div>
+        <div class="absolute inset-0 bg-grid opacity-10"></div>
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 animate-fade-in">Bhawani Shankar Borana</h1>
+            <p class="text-xl md:text-2xl font-light mb-8 animate-fade-in" style="animation-delay: 0.2s;">Web Developer | UI/UX Designer</p>
+            <div class="animate-fade-in" style="animation-delay: 0.4s;">
+                <a href="#contact" class="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition duration-300 inline-block mr-4">Hire Me</a>
+                <a href="#projects" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-600 transition duration-300 inline-block">View Work</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-blue-600">BS Borana</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="nav-link text-gray-700 hover:text-blue-600">About</a>
+                <a href="#skills" class="nav-link text-gray-700 hover:text-blue-600">Skills</a>
+                <a href="#projects" class="nav-link text-gray-700 hover:text-blue-600">Projects</a>
+                <a href="#contact" class="nav-link text-gray-700 hover:text-blue-600">Contact</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 py-4">
+            <a href="#about" class="block py-2 text-gray-700 hover:text-blue-600">About</a>
+            <a href="#skills" class="block py-2 text-gray-700 hover:text-blue-600">Skills</a>
+            <a href="#projects" class="block py-2 text-gray-700 hover:text-blue-600">Projects</a>
+            <a href="#contact" class="block py-2 text-gray-700 hover:text-blue-600">Contact</a>
+        </div>
+    </nav>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 section container mx-auto px-6">
+        <div class="flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" 
+                     alt="Bhawani Shankar Borana" 
+                     class="rounded-lg shadow-xl w-full max-w-md mx-auto">
+            </div>
+            <div class="md:w-1/2">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">About Me</h2>
+                <p class="text-lg mb-6 text-gray-600 leading-relaxed">
+                    Hello! I'm Bhawani Shankar Borana, a passionate web developer specializing in creating beautiful, functional, and user-centered digital experiences. With expertise in <span class="text-blue-600 font-medium">HTML, CSS, and JavaScript</span>, I craft websites that not only look great but also provide intuitive user experiences.
+                </p>
+                <p class="text-lg mb-6 text-gray-600 leading-relaxed">
+                    My background in <span class="text-blue-600 font-medium">UI/UX design</span> allows me to approach development with a designer's eye, ensuring that functionality meets aesthetics. I believe in clean, efficient code and enjoy solving complex problems with simple, elegant solutions.
+                </p>
+                <p class="text-lg mb-8 text-gray-600 leading-relaxed">
+                    When I'm not coding, you can find me exploring new technologies, contributing to open-source projects, or mentoring aspiring developers.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#contact" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition duration-300">Get In Touch</a>
+                    <a href="https://github.com/bhawaniborana" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition duration-300">View GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-gray-100 section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-16 text-gray-800">My Skills</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Technical Skills -->
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 flex items-center">
+                        <i class="fas fa-code mr-3 text-blue-600"></i>
+                        Technical Skills
+                    </h3>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">HTML5</span>
+                                <span class="text-blue-600">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="skill-bar bg-blue-600 h-2.5 rounded-full" style="width: 0;" data-width="95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">CSS3 & Tailwind</span>
+                                <span class="text-blue-600">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="skill-bar bg-blue-600 h-2.5 rounded-full" style="width: 0;" data-width="90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">JavaScript</span>
+                                <span class="text-blue-600">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="skill-bar bg-blue-600 h-2.5 rounded-full" style="width: 0;" data-width="85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Design Skills -->
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800 flex items-center">
+                        <i class="fas fa-paint-brush mr-3 text-blue-600"></i>
+                        Design Skills
+                    </h3>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">UI Design</span>
+                                <span class="text-blue-600">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="skill-bar bg-blue-600 h-2.5 rounded-full" style="width: 0;" data-width="90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">UX Design</span>
+                                <span class="text-blue-600">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="skill-bar bg-blue-600 h-2.5 rounded-full" style="width: 0;" data-width="85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-700">Responsive Design</span>
+                                <span class="text-blue-600">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="skill-bar bg-blue-600 h-2.5 rounded-full" style="width: 0;" data-width="95%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Other Skills -->
+            <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300">
+                    <i class="fas fa-mobile-alt text-4xl text-blue-600 mb-3"></i>
+                    <h4 class="font-medium">Mobile-Friendly</h4>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300">
+                    <i class="fas fa-bolt text-4xl text-blue-600 mb-3"></i>
+                    <h4 class="font-medium">Fast Load Times</h4>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300">
+                    <i class="fas fa-search text-4xl text-blue-600 mb-3"></i>
+                    <h4 class="font-medium">SEO Optimized</h4>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300">
+                    <i class="fas fa-users text-4xl text-blue-600 mb-3"></i>
+                    <h4 class="font-medium">User-Focused</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 section container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-16 text-gray-800">Featured Projects</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Project 1 -->
+            <div class="project-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1374&q=80" 
+                         alt="E-commerce Dashboard" 
+                         class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">E-commerce Dashboard</h3>
+                    <p class="text-gray-600 mb-4">A responsive admin dashboard for e-commerce businesses with real-time analytics and product management.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">HTML</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">CSS</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">JavaScript</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">Chart.js</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">Live Demo</a>
+                        <a href="#" class="text-gray-600 hover:text-gray-800 font-medium">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 2 -->
+            <div class="project-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-1.2.1&auto=format&fit=crop&w=1376&q=80" 
+                         alt="Travel Booking App" 
+                         class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Travel Booking App</h3>
+                    <p class="text-gray-600 mb-4">An interactive travel booking platform with map integration, price comparison, and user reviews.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">HTML</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">CSS</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">JavaScript</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">Leaflet.js</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">Live Demo</a>
+                        <a href="#" class="text-gray-600 hover:text-gray-800 font-medium">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 3 -->
+            <div class="project-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
+                         alt="Fitness Tracker" 
+                         class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Fitness Tracker</h3>
+                    <p class="text-gray-600 mb-4">A comprehensive fitness tracking application with workout logging, progress visualization, and goal setting.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">HTML</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">CSS</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">JavaScript</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">D3.js</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">Live Demo</a>
+                        <a href="#" class="text-gray-600 hover:text-gray-800 font-medium">GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-12">
+            <a href="https://github.com/bhawaniborana?tab=repositories" class="inline-block bg-gray-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-gray-700 transition duration-300">
+                <i class="fab fa-github mr-2"></i> View All Projects
+            </a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-900 text-white section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-16">Get In Touch</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6">Contact Information</h3>
+                    <p class="mb-8 text-gray-300">Have a project in mind or want to discuss potential opportunities? Feel free to reach out!</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <i class="fas fa-envelope text-blue-400 mt-1 mr-4"></i>
+                            <div>
+                                <h4 class="font-medium">Email</h4>
+                                <p class="text-gray-400">bhawani.borana@example.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-blue-400 mt-1 mr-4"></i>
+                            <div>
+                                <h4 class="font-medium">Location</h4>
+                                <p class="text-gray-400">Jaipur, Rajasthan, India</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-globe text-blue-400 mt-1 mr-4"></i>
+                            <div>
+                                <h4 class="font-medium">Social Media</h4>
+                                <div class="flex space-x-4 mt-2">
+                                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                                        <i class="fab fa-github fa-lg"></i>
+                                    </a>
+                                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                                        <i class="fab fa-linkedin-in fa-lg"></i>
+                                    </a>
+                                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                                        <i class="fab fa-twitter fa-lg"></i>
+                                    </a>
+                                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                                        <i class="fab fa-codepen fa-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="block mb-2 text-sm font-medium text-gray-300">Your Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block mb-2 text-sm font-medium text-gray-300">Your Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white" required>
+                        </div>
+                        <div>
+                            <label for="subject" class="block mb-2 text-sm font-medium text-gray-300">Subject</label>
+                            <input type="text" id="subject" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white" required>
+                        </div>
+                        <div>
+                            <label for="message" class="block mb-2 text-sm font-medium text-gray-300">Message</label>
+                            <textarea id="message" rows="5" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-300">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-white">Bhawani Shankar Borana</h3>
+                    <p class="mb-4">Creating beautiful, functional websites with a focus on user experience and clean code.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-github fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-linkedin-in fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-twitter fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-white">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="hover:text-white transition duration-300">About</a></li>
+                        <li><a href="#skills" class="hover:text-white transition duration-300">Skills</a></li>
+                        <li><a href="#projects" class="hover:text-white transition duration-300">Projects</a></li>
+                        <li><a href="#contact" class="hover:text-white transition duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-white">Services</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition duration-300">Web Development</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">UI/UX Design</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">Responsive Design</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">Code Review</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-white">Newsletter</h4>
+                    <p class="mb-4">Subscribe to my newsletter for the latest updates and insights.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="bg-gray-700 text-white px-4 py-2 rounded-l-lg focus:outline-none flex-grow">
+                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 transition duration-300">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+                <p>&copy; 2023 Bhawani Shankar Borana. All rights reserved.</p>
+                <div class="flex justify-center space-x-6 mt-4">
+                    <a href="#" class="text-sm text-gray-400 hover:text-white transition duration-300">Privacy Policy</a>
+                    <a href="#" class="text-sm text-gray-400 hover:text-white transition duration-300">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-blue-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition duration-300 opacity-0 invisible">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+
+        // Back to top button
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Form submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! I will get back to you soon.');
+            this.reset();
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate skill bars
+                    if (entry.target.id === 'skills') {
+                        document.querySelectorAll('.skill-bar').forEach(bar => {
+                            const width = bar.getAttribute('data-width');
+                            bar.style.width = width;
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Add animation delay to project cards
+        document.querySelectorAll('.project-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+    </script>
+</body>
+</html>
