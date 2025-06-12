@@ -3,403 +3,1089 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Movie Filter Bot</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>MovieFinder - Discover Your Next Favorite Film</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        /* Custom animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        :root {
+            --primary: #6d28d9;
+            --primary-dark: #5b21b6;
+            --secondary: #0d9488;
+            --dark: #111827;
+            --darker: #0d1117;
+            --light: #f9fafb;
+            --gray: #9ca3af;
+            --success: #10b981;
         }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--darker), #1a1f29);
+            color: var(--light);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
-        
-        .pulse-hover:hover {
-            animation: pulse 1.5s infinite;
+
+        /* Header Styles */
+        header {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
-        /* Custom scrollbar */
-        .custom-scroll::-webkit-scrollbar {
-            width: 8px;
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        
-        .custom-scroll::-webkit-scrollbar-track {
-            background: #1e293b;
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
         }
-        
-        .custom-scroll::-webkit-scrollbar-thumb {
-            background: #0ea5e9;
-            border-radius: 10px;
+
+        .logo i {
+            color: var(--primary);
         }
-        
-        /* Bot message styling */
-        .bot-message {
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
             position: relative;
         }
-        
-        .bot-message:before {
-            content: "";
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
             position: absolute;
-            left: -10px;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 5% 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at top right, rgba(109, 40, 217, 0.15), transparent 30%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
             top: 0;
-            border-width: 10px 10px 10px 0;
-            border-style: solid;
-            border-color: transparent #1e40af transparent transparent;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: var(--gray);
+            animation: fadeInUp 1.2s ease;
+        }
+
+        /* Search Section */
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            animation: fadeInUp 1.4s ease;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1.2rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: var(--light);
+            font-size: 1.1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 25px rgba(109, 40, 217, 0.3);
+        }
+
+        .search-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(109, 40, 217, 0.3);
+        }
+
+        .search-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(109, 40, 217, 0.4);
+        }
+
+        .filter-options {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--light);
+            border: none;
+            border-radius: 30px;
+            padding: 0.7rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Movie Grid */
+        .container {
+            padding: 0 5% 5rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .movie-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(109, 40, 217, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .movie-card:hover .movie-poster {
+            transform: scale(1.05);
+        }
+
+        .movie-info {
+            padding: 1.5rem;
+        }
+
+        .movie-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .rating {
+            color: #fbbf24;
+        }
+
+        .movie-description {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            margin-left: 0.5rem;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+        }
+
+        /* Video Player Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: var(--dark);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 900px;
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            background: var(--darker);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: var(--primary);
+        }
+
+        .video-container {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .movie-details {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .detail-poster {
+            width: 200px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .detail-info {
+            flex: 1;
+        }
+
+        .detail-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gray);
+        }
+
+        .detail-rating {
+            color: #fbbf24;
+        }
+
+        .detail-plot {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker);
+            padding: 4rem 5% 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
         }
         
-        /* Smooth transitions */
-        .transition-all {
-            transition: all 0.3s ease;
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+        
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .movie-details {
+                flex-direction: column;
+            }
+            
+            .detail-poster {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .filter-options {
+                gap: 0.8rem;
+            }
+            
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-links {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero {
+                padding: 4rem 5% 2rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .movies-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-header {
+                padding: 1rem;
+            }
+            
+            .modal-title {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-200 min-h-screen">
-    <!-- Main Container -->
-    <div class="container mx-auto px-4 py-8 max-w-6xl">
-        <!-- Header -->
-        <header class="flex flex-col md:flex-row justify-between items-center mb-10 fade-in">
-            <div class="flex items-center mb-4 md:mb-0">
-                <div class="bg-blue-600 p-3 rounded-full mr-4">
-                    <i class="fas fa-film text-2xl"></i>
-                </div>
-                <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                    Movie Filter Bot
-                </h1>
-            </div>
-            <div class="flex space-x-4">
-                <button class="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition-all flex items-center">
-                    <i class="fab fa-telegram mr-2"></i> Invite Bot
-                </button>
-                <button class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg transition-all flex items-center">
-                    <i class="fas fa-code mr-2"></i> Source Code
-                </button>
-            </div>
-        </header>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <i class="fas fa-film"></i>
+                Movie<span>Finder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Movies</a></li>
+                <li><a href="#">TV Shows</a></li>
+                <li><a href="#">Genres</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="fade-in">Discover Your Next Favorite Movie</h1>
+        <p class="fade-in delay-1">Search through thousands of movies, find ratings, trailers and more. All in one place.</p>
         
-        <!-- Bot Features Section -->
-        <section class="mb-16 fade-in" style="animation-delay: 0.2s;">
-            <h2 class="text-2xl font-semibold mb-6 border-b border-slate-700 pb-2">Bot Features</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Feature 1 -->
-                <div class="bg-slate-800 p-6 rounded-xl hover:shadow-lg transition-all hover:shadow-blue-900/20 pulse-hover">
-                    <div class="text-blue-400 mb-4">
-                        <i class="fas fa-link text-3xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2">URL Shortener</h3>
-                    <p class="text-slate-400">Automatically shortens movie URLs for easy sharing.</p>
-                </div>
-                
-                <!-- Feature 2 -->
-                <div class="bg-slate-800 p-6 rounded-xl hover:shadow-lg transition-all hover:shadow-blue-900/20 pulse-hover">
-                    <div class="text-green-400 mb-4">
-                        <i class="fas fa-users text-3xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2">Force Join</h3>
-                    <p class="text-slate-400">Requires users to join channels before accessing content.</p>
-                </div>
-                
-                <!-- Feature 3 -->
-                <div class="bg-slate-800 p-6 rounded-xl hover:shadow-lg transition-all hover:shadow-blue-900/20 pulse-hover">
-                    <div class="text-yellow-400 mb-4">
-                        <i class="fas fa-filter text-3xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2">Auto Filter</h3>
-                    <p class="text-slate-400">Filters movies by genre, year, and quality automatically.</p>
-                </div>
-                
-                <!-- Feature 4 -->
-                <div class="bg-slate-800 p-6 rounded-xl hover:shadow-lg transition-all hover:shadow-blue-900/20 pulse-hover">
-                    <div class="text-purple-400 mb-4">
-                        <i class="fas fa-chart-line text-3xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2">Analytics</h3>
-                    <p class="text-slate-400">Tracks user activity and popular content.</p>
-                </div>
+        <div class="search-container fade-in delay-2">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search for movies, genres, actors...">
+                <button class="search-btn"><i class="fas fa-search"></i> Search</button>
             </div>
-        </section>
-        
-        <!-- Demo Section -->
-        <section class="mb-16 fade-in" style="animation-delay: 0.4s;">
-            <h2 class="text-2xl font-semibold mb-6 border-b border-slate-700 pb-2">Live Demo</h2>
-            <div class="flex flex-col lg:flex-row gap-8">
-                <!-- Chat Interface -->
-                <div class="bg-slate-800 rounded-xl overflow-hidden flex-1">
-                    <div class="bg-slate-900 p-4 border-b border-slate-700 flex items-center">
-                        <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-                        <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
-                        <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                        <span class="ml-2 font-medium">Movie Filter Bot</span>
+            
+            <div class="filter-options">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Action</button>
+                <button class="filter-btn">Comedy</button>
+                <button class="filter-btn">Drama</button>
+                <button class="filter-btn">Sci-Fi</button>
+                <button class="filter-btn">Horror</button>
+                <button class="filter-btn">Romance</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Movies -->
+    <section class="container">
+        <h2 class="section-title">Featured Movies</h2>
+        <div class="movies-grid">
+            <!-- Movie Card 1 -->
+            <div class="movie-card fade-in delay-1">
+                <img src="https://m.media-amazon.com/images/M/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_.jpg" alt="Avengers: Endgame" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">Avengers: Endgame</h3>
+                    <div class="movie-meta">
+                        <span>2019</span>
+                        <span class="rating"><i class="fas fa-star"></i> 8.4</span>
                     </div>
-                    <div class="p-4 h-96 overflow-y-auto custom-scroll space-y-4">
-                        <!-- Bot welcome message -->
-                        <div class="bot-message bg-slate-700 p-4 rounded-lg text-white max-w-xs ml-10">
-                            <p>👋 Hello there! I'm your Movie Filter Bot!</p>
-                            <p>Type /help to see what I can do.</p>
-                        </div>
-                        
-                        <!-- User command -->
-                        <div class="bg-blue-800 p-4 rounded-lg text-white max-w-xs ml-auto">
-                            /filter action 2023
-                        </div>
-                        
-                        <!-- Bot response -->
-                        <div class="bot-message bg-slate-700 p-4 rounded-lg text-white max-w-xs ml-10">
-                            <p>🎬 Here are the latest Action movies from 2023:</p>
-                            <div class="mt-2 space-y-2">
-                                <div class="bg-slate-800 p-2 rounded flex items-center">
-                                    <i class="fas fa-film text-blue-400 mr-2"></i>
-                                    <p class="truncate">John Wick 4 - 1080p HD</p>
-                                </div>
-                                <a href="#" class="block bg-slate-800 hover:bg-slate-600 p-2 rounded transition-all text-center text-blue-400">
-                                    <i class="fas fa-download mr-1"></i> Download
-                                </a>
-                                <p class="text-xs text-slate-400">Shortened URL: <a href="#" class="text-blue-400">bit.ly/jw4-movie</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 bg-slate-900 border-t border-slate-700">
-                        <div class="flex">
-                            <input type="text" placeholder="Type a command..." class="bg-slate-800 text-white flex-1 p-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <button class="bg-blue-700 hover:bg-blue-600 px-4 rounded-r-lg transition-all">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Command List -->
-                <div class="bg-slate-800 rounded-xl p-6 w-full lg:w-80">
-                    <h3 class="text-xl font-semibold mb-4">Available Commands</h3>
-                    <div class="space-y-4">
-                        <div class="bg-slate-700/50 hover:bg-slate-700 p-3 rounded-lg transition-all">
-                            <div class="flex items-start">
-                                <div class="bg-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-play text-xs"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-medium">/start</h4>
-                                    <p class="text-slate-400 text-sm">Start interacting with the bot</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-slate-700/50 hover:bg-slate-700 p-3 rounded-lg transition-all">
-                            <div class="flex items-start">
-                                <div class="bg-green-600 w-8 h-8 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-filter text-xs"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-medium">/filter [genre] [year]</h4>
-                                    <p class="text-slate-400 text-sm">Filter movies by genre and year</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-slate-700/50 hover:bg-slate-700 p-3 rounded-lg transition-all">
-                            <div class="flex items-start">
-                                <div class="bg-yellow-600 w-8 h-8 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-users text-xs"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-medium">/join</h4>
-                                    <p class="text-slate-400 text-sm">Get invitation links to required channels</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-slate-700/50 hover:bg-slate-700 p-3 rounded-lg transition-all">
-                            <div class="flex items-start">
-                                <div class="bg-purple-600 w-8 h-8 rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-question text-xs"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-medium">/help</h4>
-                                    <p class="text-slate-400 text-sm">Show help information</p>
-                                </div>
-                            </div>
-                        </div>
+                    <p class="movie-description">After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more to reverse Thanos' actions.</p>
+                    <div class="actions">
+                        <button class="btn play-btn" data-id="tt4154796"><i class="fas fa-play"></i> Watch Trailer</button>
+                        <button class="btn btn-outline"><i class="fas fa-info-circle"></i> Details</button>
                     </div>
                 </div>
             </div>
-        </section>
-        
-        <!-- Setup Instructions -->
-        <section class="mb-16 fade-in" style="animation-delay: 0.6s;">
-            <h2 class="text-2xl font-semibold mb-6 border-b border-slate-700 pb-2">Setup Instructions</h2>
-            <div class="bg-slate-800 rounded-xl overflow-hidden">
-                <div class="p-6">
-                    <div class="space-y-6">
-                        <!-- Step 1 -->
-                        <div class="flex flex-col md:flex-row">
-                            <div class="flex items-start md:w-1/4">
-                                <div class="bg-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-4">
-                                    <span class="font-bold">1</span>
-                                </div>
-                                <h3 class="text-lg font-medium">Create Telegram Bot</h3>
-                            </div>
-                            <div class="mt-4 md:mt-0 md:w-3/4">
-                                <p class="text-slate-400">Start a conversation with @BotFather on Telegram and create a new bot to get your API token.</p>
-                                <div class="bg-slate-900 rounded-lg p-4 mt-2 font-mono text-sm overflow-x-auto">
-                                    /newbot → Choose bot name → Get API token
-                                </div>
-                            </div>
+            
+            <!-- Movie Card 2 -->
+            <div class="movie-card fade-in delay-2">
+                <img src="https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg" alt="The Shawshank Redemption" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">The Shawshank Redemption</h3>
+                    <div class="movie-meta">
+                        <span>1994</span>
+                        <span class="rating"><i class="fas fa-star"></i> 9.3</span>
+                    </div>
+                    <p class="movie-description">Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.</p>
+                    <div class="actions">
+                        <button class="btn play-btn" data-id="tt0111161"><i class="fas fa-play"></i> Watch Trailer</button>
+                        <button class="btn btn-outline"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Movie Card 3 -->
+            <div class="movie-card fade-in delay-3">
+                <img src="https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_.jpg" alt="The Dark Knight" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">The Dark Knight</h3>
+                    <div class="movie-meta">
+                        <span>2008</span>
+                        <span class="rating"><i class="fas fa-star"></i> 9.0</span>
+                    </div>
+                    <p class="movie-description">When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests.</p>
+                    <div class="actions">
+                        <button class="btn play-btn" data-id="tt0468569"><i class="fas fa-play"></i> Watch Trailer</button>
+                        <button class="btn btn-outline"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Movie Card 4 -->
+            <div class="movie-card fade-in delay-1">
+                <img src="https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg" alt="Inception" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">Inception</h3>
+                    <div class="movie-meta">
+                        <span>2010</span>
+                        <span class="rating"><i class="fas fa-star"></i> 8.8</span>
+                    </div>
+                    <p class="movie-description">A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.</p>
+                    <div class="actions">
+                        <button class="btn play-btn" data-id="tt1375666"><i class="fas fa-play"></i> Watch Trailer</button>
+                        <button class="btn btn-outline"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Releases -->
+    <section class="container">
+        <h2 class="section-title">New Releases</h2>
+        <div class="movies-grid">
+            <!-- Movie Card 5 -->
+            <div class="movie-card fade-in delay-2">
+                <img src="https://m.media-amazon.com/images/M/MV5BMDk4MTdhYzEtODk3OS00ZDBjLWFhNTQtMDI2ODdjNzQzZTA3XkEyXkFqcGdeQXVyMjMxOTE0ODA@._V1_.jpg" alt="Dune: Part Two" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">Dune: Part Two</h3>
+                    <div class="movie-meta">
+                        <span>2024</span>
+                        <span class="rating"><i class="fas fa-star"></i> 8.8</span>
+                    </div>
+                    <p class="movie-description">Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.</p>
+                    <div class="actions">
+                        <button class="btn play-btn" data-id="tt15239678"><i class="fas fa-play"></i> Watch Trailer</button>
+                        <button class="btn btn-outline"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Movie Card 6 -->
+            <div class="movie-card fade-in delay-3">
+                <img src="https://m.media-amazon.com/images/M/MV5BZTcyMzUwYzEtYjU0OS00NWE1LTg0ZjktMDljNTFlYjExY2U4XkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg" alt="Godzilla x Kong: The New Empire" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">Godzilla x Kong: The New Empire</h3>
+                    <div class="movie-meta">
+                        <span>2024</span>
+                        <span class="rating"><i class="fas fa-star"></i> 6.4</span>
+                    </div>
+                    <p class="movie-description">Two ancient titans, Godzilla and Kong, clash in an epic battle as humans unravel their intertwined origins and connection to Skull Island's mysteries.</p>
+                    <div class="actions">
+                        <button class="btn play-btn" data-id="tt14539740"><i class="fas fa-play"></i> Watch Trailer</button>
+                        <button class="btn btn-outline"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Movie Card 7 -->
+            <div class="movie-card fade-in delay-1">
+                <img src="https://m.media-amazon.com/images/M/MV5BNzQ1ODUzYjktMzRiMS00ODNiLWI4NzQtOTRiN2VlNTNmODFjXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg" alt="Kung Fu Panda 4" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">Kung Fu Panda 4</h3>
+                    <div class="movie-meta">
+                        <span>2024</span>
+                        <span class="rating"><i class="fas fa-star"></i> 6.6</span>
+                    </div>
+                    <p class="movie-description">After Po is tapped to become the Spiritual Leader of the Valley of Peace, he needs to find and train a new Dragon Warrior.</p>
+                    <div class="actions">
+                        <button class="btn play-btn" data-id="tt21692408"><i class="fas fa-play"></i> Watch Trailer</button>
+                        <button class="btn btn-outline"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Movie Card 8 -->
+            <div class="movie-card fade-in delay-2">
+                <img src="https://m.media-amazon.com/images/M/MV5BMDkyMTY3OTYtYzU3MS00YzE5LWE5MTItYjA0ODU2YjQxMWYxXkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg" alt="Ghostbusters: Frozen Empire" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">Ghostbusters: Frozen Empire</h3>
+                    <div class="movie-meta">
+                        <span>2024</span>
+                        <span class="rating"><i class="fas fa-star"></i> 6.5</span>
+                    </div>
+                    <p class="movie-description">When the discovery of an ancient artifact unleashes an evil force, Ghostbusters new and old must join forces to protect their home.</p>
+                    <div class="actions">
+                        <button class="btn play-btn" data-id="tt12899694"><i class="fas fa-play"></i> Watch Trailer</button>
+                        <button class="btn btn-outline"><i class="fas fa-info-circle"></i> Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Player Modal -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Movie Trailer</h3>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <div class="video-container">
+                <iframe id="trailerPlayer" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="modal-body">
+                <div class="movie-details">
+                    <img id="detailPoster" src="" alt="Movie Poster" class="detail-poster">
+                    <div class="detail-info">
+                        <h2 id="detailTitle" class="detail-title"></h2>
+                        <div class="detail-meta">
+                            <span id="detailYear"></span>
+                            <span id="detailRuntime"></span>
+                            <span id="detailRating" class="detail-rating"></span>
                         </div>
-                        
-                        <!-- Step 2 -->
-                        <div class="flex flex-col md:flex-row">
-                            <div class="flex items-start md:w-1/4">
-                                <div class="bg-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-4">
-                                    <span class="font-bold">2</span>
-                                </div>
-                                <h3 class="text-lg font-medium">Configure Channels</h3>
-                            </div>
-                            <div class="mt-4 md:mt-0 md:w-3/4">
-                                <p class="text-slate-400">Create your movie channel and group where the bot will operate.</p>
-                                <div class="bg-slate-900 rounded-lg p-4 mt-2 font-mono text-sm">
-                                    # Required IDs:
-                                    <br>MOVIE_CHANNEL_ID = -100123456789
-                                    <br>MOVIE_GROUP_ID = -100987654321
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Step 3 -->
-                        <div class="flex flex-col md:flex-row">
-                            <div class="flex items-start md:w-1/4">
-                                <div class="bg-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-4">
-                                    <span class="font-bold">3</span>
-                                </div>
-                                <h3 class="text-lg font-medium">URL Shortener API</h3>
-                            </div>
-                            <div class="mt-4 md:mt-0 md:w-3/4">
-                                <p class="text-slate-400">Register for a URL shortener service and add your API key.</p>
-                                <div class="bg-slate-900 rounded-lg p-4 mt-2 font-mono text-sm">
-                                    # bit.ly API example
-                                    <br>URL_SHORTENER_API = "your_api_key"
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Step 4 -->
-                        <div class="flex flex-col md:flex-row">
-                            <div class="flex items-start md:w-1/4">
-                                <div class="bg-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-4">
-                                    <span class="font-bold">4</span>
-                                </div>
-                                <h3 class="text-lg font-medium">Host and Deploy</h3>
-                            </div>
-                            <div class="mt-4 md:mt-0 md:w-3/4">
-                                <p class="text-slate-400">Deploy your bot on a hosting service or run it locally.</p>
-                                <div class="bg-slate-900 rounded-lg p-4 mt-2 font-mono text-sm">
-                                    # Python deployment example
-                                    <br>python3 bot.py
-                                </div>
-                            </div>
+                        <p id="detailPlot" class="detail-plot"></p>
+                        <div class="actions">
+                            <button class="btn"><i class="fas fa-play"></i> Watch Full Movie</button>
+                            <button class="btn btn-outline"><i class="fas fa-plus"></i> Add to Watchlist</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-        
-        <!-- FAQ Section -->
-        <section class="mb-16 fade-in" style="animation-delay: 0.8s;">
-            <h2 class="text-2xl font-semibold mb-6 border-b border-slate-700 pb-2">Frequently Asked Questions</h2>
-            <div class="space-y-4">
-                <div class="bg-slate-800 rounded-xl overflow-hidden transition-all hover:shadow-lg hover:shadow-blue-900/20">
-                    <button onclick="toggleFAQ(1)" class="w-full p-4 text-left flex justify-between items-center">
-                        <span class="font-medium">How does the auto-filter work?</span>
-                        <i class="fas fa-chevron-down transition-transform duration-300" id="faq-icon-1"></i>
-                    </button>
-                    <div id="faq-content-1" class="px-4 pb-4 hidden">
-                        <p class="text-slate-400">The bot monitors your movie channel for new posts, extracts metadata from the post text (like title, year, quality, and genre), and indexes it in a searchable database. Users can then filter by these criteria.</p>
-                    </div>
-                </div>
-                
-                <div class="bg-slate-800 rounded-xl overflow-hidden transition-all hover:shadow-lg hover:shadow-blue-900/20">
-                    <button onclick="toggleFAQ(2)" class="w-full p-4 text-left flex justify-between items-center">
-                        <span class="font-medium">Can I customize the required channels?</span>
-                        <i class="fas fa-chevron-down transition-transform duration-300" id="faq-icon-2"></i>
-                    </button>
-                    <div id="faq-content-2" class="px-4 pb-4 hidden">
-                        <p class="text-slate-400">Yes, you can configure any number of required channels during setup. Just provide the channel IDs in the configuration file and the bot will enforce joining all of them before granting access.</p>
-                    </div>
-                </div>
-                
-                <div class="bg-slate-800 rounded-xl overflow-hidden transition-all hover:shadow-lg hover:shadow-blue-900/20">
-                    <button onclick="toggleFAQ(3)" class="w-full p-4 text-left flex justify-between items-center">
-                        <span class="font-medium">Is there a way to prevent spam?</span>
-                        <i class="fas fa-chevron-down transition-transform duration-300" id="faq-icon-3"></i>
-                    </button>
-                    <div id="faq-content-3" class="px-4 pb-4 hidden">
-                        <p class="text-slate-400">The bot implements several anti-spam measures including request rate limiting, CAPTCHA verification for suspicious users, and optional manual approval for new members.</p>
-                    </div>
-                </div>
-                
-                <div class="bg-slate-800 rounded-xl overflow-hidden transition-all hover:shadow-lg hover:shadow-blue-900/20">
-                    <button onclick="toggleFAQ(4)" class="w-full p-4 text-left flex justify-between items-center">
-                        <span class="font-medium">How can I view analytics data?</span>
-                        <i class="fas fa-chevron-down transition-transform duration-300" id="faq-icon-4"></i>
-                    </button>
-                    <div id="faq-content-4" class="px-4 pb-4 hidden">
-                        <p class="text-slate-400">Admin commands like /stats and /logs provide detailed analytics including active users, popular requests, and usage patterns. Data is also logged to a database for historical analysis.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Footer -->
-        <footer class="text-center text-slate-500 text-sm fade-in" style="animation-delay: 1s;">
-            <div class="flex justify-center space-x-6 mb-4">
-                <a href="#" class="hover:text-blue-400 transition-all"><i class="fab fa-telegram"></i></a>
-                <a href="#" class="hover:text-blue-400 transition-all"><i class="fab fa-github"></i></a>
-                <a href="#" class="hover:text-blue-400 transition-all"><i class="fas fa-globe"></i></a>
-            </div>
-            <p>© 2023 Movie Filter Bot. All rights reserved.</p>
-            <p class="mt-2">This bot complies with Telegram's ToS and respects copyright laws.</p>
-        </footer>
+        </div>
     </div>
 
-    <script>
-        // FAQ Toggle Function
-        function toggleFAQ(num) {
-            const content = document.getElementById(`faq-content-${num}`);
-            const icon = document.getElementById(`faq-icon-${num}`);
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>MovieFinder</h3>
+                <p>Your ultimate destination for discovering, exploring, and enjoying movies from all genres and eras.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
             
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                icon.classList.add('rotate-180');
-            } else {
-                content.classList.add('hidden');
-                icon.classList.remove('rotate-180');
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Movies</a></li>
+                    <li><a href="#">TV Shows</a></li>
+                    <li><a href="#">New Releases</a></li>
+                    <li><a href="#">Top Rated</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Genres</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Comedy</a></li>
+                    <li><a href="#">Drama</a></li>
+                    <li><a href="#">Horror</a></li>
+                    <li><a href="#">Sci-Fi</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 MovieFinder. All rights reserved. This site uses the OMDB API but is not endorsed or certified by OMDB.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Modal functionality
+        const modal = document.getElementById('videoModal');
+        const closeModal = document.getElementById('closeModal');
+        const player = document.getElementById('trailerPlayer');
+        const playButtons = document.querySelectorAll('.play-btn');
+        const detailTitle = document.getElementById('detailTitle');
+        const detailYear = document.getElementById('detailYear');
+        const detailRuntime = document.getElementById('detailRuntime');
+        const detailRating = document.getElementById('detailRating');
+        const detailPlot = document.getElementById('detailPlot');
+        const detailPoster = document.getElementById('detailPoster');
+
+        // Movie data (simulating API response)
+        const movieData = {
+            'tt4154796': {
+                title: 'Avengers: Endgame',
+                year: '2019',
+                runtime: '181 min',
+                rating: '8.4',
+                plot: 'After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more to reverse Thanos\' actions and restore balance to the universe.',
+                poster: 'https://m.media-amazon.com/images/M/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_.jpg',
+                trailer: 'https://www.youtube.com/embed/TcMBFSGVi1c'
+            },
+            'tt0111161': {
+                title: 'The Shawshank Redemption',
+                year: '1994',
+                runtime: '142 min',
+                rating: '9.3',
+                plot: 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.',
+                poster: 'https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg',
+                trailer: 'https://www.youtube.com/embed/6hB3S9bIaco'
+            },
+            'tt0468569': {
+                title: 'The Dark Knight',
+                year: '2008',
+                runtime: '152 min',
+                rating: '9.0',
+                plot: 'When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.',
+                poster: 'https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_.jpg',
+                trailer: 'https://www.youtube.com/embed/EXeTwQWrcwY'
+            },
+            'tt1375666': {
+                title: 'Inception',
+                year: '2010',
+                runtime: '148 min',
+                rating: '8.8',
+                plot: 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.',
+                poster: 'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg',
+                trailer: 'https://www.youtube.com/embed/YoHD9XEInc0'
+            },
+            'tt15239678': {
+                title: 'Dune: Part Two',
+                year: '2024',
+                runtime: '166 min',
+                rating: '8.8',
+                plot: 'Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.',
+                poster: 'https://m.media-amazon.com/images/M/MV5BMDk4MTdhYzEtODk3OS00ZDBjLWFhNTQtMDI2ODdjNzQzZTA3XkEyXkFqcGdeQXVyMjMxOTE0ODA@._V1_.jpg',
+                trailer: 'https://www.youtube.com/embed/U2Qp5pL3ovA'
+            },
+            'tt14539740': {
+                title: 'Godzilla x Kong: The New Empire',
+                year: '2024',
+                runtime: '115 min',
+                rating: '6.4',
+                plot: 'Two ancient titans, Godzilla and Kong, clash in an epic battle as humans unravel their intertwined origins and connection to Skull Island\'s mysteries.',
+                poster: 'https://m.media-amazon.com/images/M/MV5BZTcyMzUwYzEtYjU0OS00NWE1LTg0ZjktMDljNTFlYjExY2U4XkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg',
+                trailer: 'https://www.youtube.com/embed/lV1OOlGwExM'
+            },
+            'tt21692408': {
+                title: 'Kung Fu Panda 4',
+                year: '2024',
+                runtime: '94 min',
+                rating: '6.6',
+                plot: 'After Po is tapped to become the Spiritual Leader of the Valley of Peace, he needs to find and train a new Dragon Warrior.',
+                poster: 'https://m.media-amazon.com/images/M/MV5BNzQ1ODUzYjktMzRiMS00ODNiLWI4NzQtOTRiN2VlNTNmODFjXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg',
+                trailer: 'https://www.youtube.com/embed/_inKs4eeHiI'
+            },
+            'tt12899694': {
+                title: 'Ghostbusters: Frozen Empire',
+                year: '2024',
+                runtime: '115 min',
+                rating: '6.5',
+                plot: 'When the discovery of an ancient artifact unleashes an evil force, Ghostbusters new and old must join forces to protect their home and save the world from a second Ice Age.',
+                poster: 'https://m.media-amazon.com/images/M/MV5BMDkyMTY3OTYtYzU3MS00YzE5LWE5MTItYjA0ODU2YjQxMWYxXkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg',
+                trailer: 'https://www.youtube.com/embed/XGcCY0x1H3g'
+            }
+        };
+
+        // Open modal with trailer
+        playButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const movieId = button.getAttribute('data-id');
+                const movie = movieData[movieId];
+                
+                if (movie) {
+                    player.src = movie.trailer;
+                    detailTitle.textContent = movie.title;
+                    detailYear.textContent = movie.year;
+                    detailRuntime.textContent = movie.runtime;
+                    detailRating.innerHTML = `<i class="fas fa-star"></i> ${movie.rating}`;
+                    detailPlot.textContent = movie.plot;
+                    detailPoster.src = movie.poster;
+                    
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
+        // Close modal
+        closeModal.addEventListener('click', () => {
+            modal.classList.remove('active');
+            player.src = '';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                player.src = '';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+        
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+        
+        function performSearch() {
+            const query = searchInput.value.trim();
+            if (query) {
+                alert(`Searching for: ${query}\nIn a real implementation, this would call the OMDB API.`);
+                // Here we would make an API call to OMDB
+                searchInput.value = '';
             }
         }
-        
-        // Simulate chat interaction
-        setTimeout(() => {
-            const chatArea = document.querySelector('.chat-demo');
-            const newBotMessage = document.createElement('div');
-            newBotMessage.className = 'bot-message bg-slate-700 p-4 rounded-lg text-white max-w-xs ml-10 mt-4';
-            newBotMessage.innerHTML = '<p>🔍 Try filters like: /filter comedy 2022 or /filter thriller</p>';
-            chatArea.appendChild(newBotMessage);
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }, 3000);
-        
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+
+        // Filter buttons
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
             });
+        });
+
+        // Initialize animations for movie cards
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.movie-card');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+            });
+            
+            setTimeout(() => {
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                    }, 200 * index);
+                });
+            }, 500);
         });
     </script>
 </body>
