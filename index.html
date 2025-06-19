@@ -1,114 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎥 Stream Torrent Magnet</title>
-  <style>
-    :root {
-      --bg: #0d1117;
-      --fg: #c9d1d9;
-      --accent: #58a6ff;
-    }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--fg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-    h1 {
-      font-size: 1.8rem;
-      color: var(--accent);
-      margin-bottom: 1rem;
-    }
-    input, button {
-      padding: 12px;
-      width: 100%;
-      max-width: 600px;
-      font-size: 16px;
-      margin: 0.5rem 0;
-      border-radius: 8px;
-      border: 1px solid #30363d;
-      background: #161b22;
-      color: var(--fg);
-    }
-    button {
-      background: var(--accent);
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-    button:hover {
-      background: #1f6feb;
-    }
-    video {
-      margin-top: 1.5rem;
-      width: 100%;
-      max-width: 800px;
-      border-radius: 12px;
-      border: 2px solid var(--accent);
-    }
-    #loader {
-      margin-top: 1rem;
-      font-size: 1rem;
-      color: var(--fg);
-      display: none;
-    }
-    @media(max-width: 600px) {
-      h1 {
-        font-size: 1.4rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <h1>🎬 Stream Magnet Link Instantly</h1>
-  <input id="magnetInput" placeholder="Paste your magnet link here..." autofocus />
-  <button onclick="startStream()">▶️ Start Streaming</button>
-  <div id="loader">⏳ Loading stream, please wait...</div>
-  <video id="videoPlayer" controls autoplay></video>
-
-  <script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script>
-  <script>
-    const client = new WebTorrent();
-
-    function startStream() {
-      const magnetURI = document.getElementById("magnetInput").value.trim();
-      const loader = document.getElementById("loader");
-      const video = document.getElementById("videoPlayer");
-      video.src = '';
-      video.style.display = 'none';
-
-      if (!magnetURI || !magnetURI.startsWith("magnet:")) {
-        alert("⚠️ Please enter a valid magnet link.");
-        return;
-      }
-
-      loader.style.display = "block";
-
-      client.add(magnetURI, torrent => {
-        const file = torrent.files.find(f =>
-          f.name.endsWith(".mp4") || f.name.endsWith(".mkv") || f.name.endsWith(".webm")
-        );
-
-        if (!file) {
-          loader.innerText = "❌ No playable video file found in this torrent.";
-          return;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torrent Stream Player</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+        .player-container {
+            transition: all 0.3s ease;
+        }
+        .progress-bar {
+            height: 6px;
+            transition: width 0.3s ease;
+        }
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg text-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Torrent Stream Player</h1>
+            <p class="text-lg md:text-xl max-w-2xl mx-auto">Stream videos directly from torrent or magnet links in your browser</p>
+        </header>
 
-        file.renderTo('video#videoPlayer', {
-          autoplay: true
-        }, () => {
-          loader.style.display = "none";
-          video.style.display = 'block';
-        });
-      });
-    }
-  </script>
+        <main class="max-w-4xl mx-auto">
+            <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-6 shadow-xl mb-8">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <input 
+                        type="text" 
+                        id="torrentLink" 
+                        placeholder="Paste magnet link or torrent file URL here..." 
+                        class="flex-grow px-4 py-3 rounded-lg bg-white bg-opacity-20 focus:bg-opacity-30 focus:outline-none transition"
+                    >
+                    <button 
+                        id="streamBtn" 
+                        class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold transition flex items-center justify-center gap-2"
+                    >
+                        <i class="fas fa-play"></i> Stream
+                    </button>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <button 
+                        id="sampleBtn1" 
+                        class="text-xs px-3 py-1 bg-indigo-800 hover:bg-indigo-900 rounded-full transition"
+                    >
+                        Sample Link 1 (Small)
+                    </button>
+                    <button 
+                        id="sampleBtn2" 
+                        class="text-xs px-3 py-1 bg-indigo-800 hover:bg-indigo-900 rounded-full transition"
+                    >
+                        Sample Link 2 (Medium)
+                    </button>
+                    <div class="tooltip ml-auto">
+                        <button class="text-sm px-3 py-1 bg-gray-700 hover:bg-gray-800 rounded-full transition">
+                            <i class="fas fa-info-circle"></i> Info
+                        </button>
+                        <span class="tooltiptext">
+                            Try with sample links or paste your own magnet link. Supported formats: MP4, MKV, AVI, etc.
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="statusContainer" class="hidden bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-6 mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-semibold" id="statusTitle">Loading Torrent...</h3>
+                    <div class="flex items-center gap-2">
+                        <span id="downloadSpeed" class="text-sm">0 KB/s</span>
+                        <span id="peersCount" class="text-sm">0 peers</span>
+                    </div>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2.5">
+                    <div id="progressBar" class="progress-bar bg-indigo-500 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+                <div class="mt-2 flex justify-between text-sm">
+                    <span id="progressText">0%</span>
+                    <span id="timeRemaining">Estimating...</span>
+                </div>
+            </div>
+
+            <div id="playerContainer" class="player-container hidden bg-black rounded-xl overflow-hidden shadow-xl mb-8">
+                <video id="videoPlayer" controls class="w-full"></video>
+                <div class="p-4 bg-gray-900">
+                    <div class="flex justify-between items-center">
+                        <h3 id="videoTitle" class="font-medium truncate">Video Title</h3>
+                        <div class="flex gap-2">
+                            <button id="downloadBtn" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 rounded text-sm">
+                                <i class="fas fa-download mr-1"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-400">
+                        <span id="videoSize">Size: Calculating...</span>
+                        <span class="mx-2">•</span>
+                        <span id="videoFormat">Format: Unknown</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="errorContainer" class="hidden bg-red-900 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 mb-8">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-exclamation-triangle text-2xl mt-1"></i>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2" id="errorTitle">Error Occurred</h3>
+                        <p id="errorMessage" class="text-gray-200">There was an issue processing your request.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-6">
+                <h2 class="text-2xl font-semibold mb-4">How to Use</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white bg-opacity-5 p-4 rounded-lg">
+                        <div class="text-indigo-400 mb-2">
+                            <i class="fas fa-link text-2xl"></i>
+                        </div>
+                        <h3 class="font-medium mb-2">1. Paste Link</h3>
+                        <p class="text-sm text-gray-300">Copy a magnet link or torrent file URL from your favorite torrent site.</p>
+                    </div>
+                    <div class="bg-white bg-opacity-5 p-4 rounded-lg">
+                        <div class="text-indigo-400 mb-2">
+                            <i class="fas fa-play-circle text-2xl"></i>
+                        </div>
+                        <h3 class="font-medium mb-2">2. Click Stream</h3>
+                        <p class="text-sm text-gray-300">Click the Stream button to start downloading and playing the content.</p>
+                    </div>
+                    <div class="bg-white bg-opacity-5 p-4 rounded-lg">
+                        <div class="text-indigo-400 mb-2">
+                            <i class="fas fa-film text-2xl"></i>
+                        </div>
+                        <h3 class="font-medium mb-2">3. Enjoy!</h3>
+                        <p class="text-sm text-gray-300">The video will start playing as soon as enough data is buffered.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="mt-16 text-center text-gray-300 text-sm">
+            <p>© 2023 Torrent Stream Player. For educational purposes only.</p>
+            <p class="mt-2">Please respect copyright laws in your country.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const client = new WebTorrent()
+            let torrentId = null
+            let currentTorrent = null
+
+            // DOM Elements
+            const torrentLinkInput = document.getElementById('torrentLink')
+            const streamBtn = document.getElementById('streamBtn')
+            const statusContainer = document.getElementById('statusContainer')
+            const statusTitle = document.getElementById('statusTitle')
+            const progressBar = document.getElementById('progressBar')
+            const progressText = document.getElementById('progressText')
+            const timeRemaining = document.getElementById('timeRemaining')
+            const downloadSpeed = document.getElementById('downloadSpeed')
+            const peersCount = document.getElementById('peersCount')
+            const playerContainer = document.getElementById('playerContainer')
+            const videoPlayer = document.getElementById('videoPlayer')
+            const videoTitle = document.getElementById('videoTitle')
+            const videoSize = document.getElementById('videoSize')
+            const videoFormat = document.getElementById('videoFormat')
+            const downloadBtn = document.getElementById('downloadBtn')
+            const errorContainer = document.getElementById('errorContainer')
+            const errorTitle = document.getElementById('errorTitle')
+            const errorMessage = document.getElementById('errorMessage')
+            const sampleBtn1 = document.getElementById('sampleBtn1')
+            const sampleBtn2 = document.getElementById('sampleBtn2')
+
+            // Sample magnet links (replace with actual small/medium test files)
+            const sampleMagnet1 = 'magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Fexplodie.org%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.empire-js.us%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent'
+            const sampleMagnet2 = 'magnet:?xt=urn:btih:209c8226b299b308beaf2b9cd3fb49212dbd13ec&dn=Big+Buck+Bunny&tr=udp%3A%2F%2Fexplodie.org%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.empire-js.us%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fbig-buck-bunny.torrent'
+
+            // Event Listeners
+            streamBtn.addEventListener('click', startStreaming)
+            torrentLinkInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') startStreaming()
+            })
+            downloadBtn.addEventListener('click', downloadVideo)
+            sampleBtn1.addEventListener('click', () => {
+                torrentLinkInput.value = sampleMagnet1
+                startStreaming()
+            })
+            sampleBtn2.addEventListener('click', () => {
+                torrentLinkInput.value = sampleMagnet2
+                startStreaming()
+            })
+
+            function startStreaming() {
+                const link = torrentLinkInput.value.trim()
+                if (!link) {
+                    showError('Input Required', 'Please enter a magnet link or torrent file URL')
+                    return
+                }
+
+                // Reset UI
+                hideError()
+                statusContainer.classList.remove('hidden')
+                playerContainer.classList.add('hidden')
+                statusTitle.textContent = 'Loading Torrent...'
+                progressBar.style.width = '0%'
+                progressText.textContent = '0%'
+                timeRemaining.textContent = 'Estimating...'
+                downloadSpeed.textContent = '0 KB/s'
+                peersCount.textContent = '0 peers'
+
+                // Update button state
+                streamBtn.disabled = true
+                streamBtn.innerHTML = '<i class="fas fa-spinner loading-spinner"></i> Processing...'
+
+                // Destroy previous torrent if exists
+                if (currentTorrent) {
+                    client.remove(currentTorrent)
+                }
+
+                // Add the torrent
+                currentTorrent = client.add(link, onTorrent)
+
+                // Handle errors
+                currentTorrent.on('error', err => {
+                    showError('Torrent Error', err.message)
+                    resetStreamButton()
+                })
+
+                function onTorrent(torrent) {
+                    // Update UI
+                    statusTitle.textContent = 'Finding Video File...'
+                    torrentId = torrent.infoHash
+
+                    // Find the largest video file
+                    const file = torrent.files.reduce((prev, current) => 
+                        current.length > prev.length ? current : prev
+                    )
+
+                    if (!file) {
+                        showError('No Video Found', 'The torrent does not contain any playable video files')
+                        resetStreamButton()
+                        return
+                    }
+
+                    // Update file info
+                    videoTitle.textContent = file.name
+                    videoSize.textContent = `Size: ${formatBytes(file.length)}`
+                    videoFormat.textContent = `Format: ${file.name.split('.').pop().toUpperCase()}`
+
+                    // Stream the file
+                    file.renderTo(videoPlayer, {
+                        autoplay: true,
+                        controls: true
+                    }, () => {
+                        // When ready to play
+                        statusContainer.classList.add('hidden')
+                        playerContainer.classList.remove('hidden')
+                        resetStreamButton()
+                    })
+
+                    // Torrent progress
+                    torrent.on('download', bytes => {
+                        const percent = Math.round(torrent.progress * 100)
+                        progressBar.style.width = `${percent}%`
+                        progressText.textContent = `${percent}%`
+                        
+                        // Calculate download speed
+                        const speed = formatBytes(torrent.downloadSpeed)
+                        downloadSpeed.textContent = `${speed}/s`
+                        
+                        // Update peers count
+                        peersCount.textContent = `${torrent.numPeers} peers`
+                        
+                        // Estimate time remaining (if download speed > 0)
+                        if (torrent.downloadSpeed > 0) {
+                            const remaining = (torrent.timeRemaining / 1000).toFixed(1)
+                            timeRemaining.textContent = `${remaining}s remaining`
+                        }
+                    })
+
+                    // Handle completion
+                    torrent.on('done', () => {
+                        statusTitle.textContent = 'Download Complete!'
+                        progressBar.style.backgroundColor = '#10B981' // green
+                    })
+
+                    // Download button functionality
+                    downloadBtn.onclick = () => {
+                        file.getBlobURL((err, url) => {
+                            if (err) {
+                                showError('Download Error', err.message)
+                                return
+                            }
+                            const a = document.createElement('a')
+                            a.href = url
+                            a.download = file.name
+                            a.click()
+                        })
+                    }
+                }
+            }
+
+            function resetStreamButton() {
+                streamBtn.disabled = false
+                streamBtn.innerHTML = '<i class="fas fa-play"></i> Stream'
+            }
+
+            function showError(title, message) {
+                errorTitle.textContent = title
+                errorMessage.textContent = message
+                errorContainer.classList.remove('hidden')
+                resetStreamButton()
+            }
+
+            function hideError() {
+                errorContainer.classList.add('hidden')
+            }
+
+            function formatBytes(bytes) {
+                if (bytes === 0) return '0 Bytes'
+                const k = 1024
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+                const i = Math.floor(Math.log(bytes) / Math.log(k))
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+            }
+        })
+    </script>
 </body>
 </html>
