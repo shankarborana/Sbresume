@@ -1,65 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Magnet Link Streamer</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎥 Stream Torrent Magnet</title>
   <style>
+    :root {
+      --bg: #0d1117;
+      --fg: #c9d1d9;
+      --accent: #58a6ff;
+    }
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #111;
-      color: white;
-      text-align: center;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+    h1 {
+      font-size: 1.8rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
     }
     input, button {
-      padding: 10px;
-      width: 80%;
+      padding: 12px;
+      width: 100%;
       max-width: 600px;
-      margin: 10px;
       font-size: 16px;
-      border-radius: 5px;
-      border: none;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+      background: #161b22;
+      color: var(--fg);
+    }
+    button {
+      background: var(--accent);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    button:hover {
+      background: #1f6feb;
     }
     video {
-      width: 90%;
+      margin-top: 1.5rem;
+      width: 100%;
       max-width: 800px;
-      margin-top: 20px;
-      border: 2px solid #ccc;
-      border-radius: 10px;
+      border-radius: 12px;
+      border: 2px solid var(--accent);
+    }
+    #loader {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: var(--fg);
+      display: none;
+    }
+    @media(max-width: 600px) {
+      h1 {
+        font-size: 1.4rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>🔗 Magnet Link Streamer</h1>
-  <input type="text" id="magnetInput" placeholder="Paste your Magnet Link here" />
-  <br>
-  <button onclick="startStreaming()">🎬 Start Streaming</button>
-  <br>
-  <video id="player" controls autoplay></video>
+  <h1>🎬 Stream Magnet Link Instantly</h1>
+  <input id="magnetInput" placeholder="Paste your magnet link here..." autofocus />
+  <button onclick="startStream()">▶️ Start Streaming</button>
+  <div id="loader">⏳ Loading stream, please wait...</div>
+  <video id="videoPlayer" controls autoplay></video>
 
   <script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script>
   <script>
     const client = new WebTorrent();
 
-    function startStreaming() {
-      const magnetURI = document.getElementById('magnetInput').value;
-      if (!magnetURI.startsWith('magnet:')) {
-        alert('Please enter a valid magnet link.');
+    function startStream() {
+      const magnetURI = document.getElementById("magnetInput").value.trim();
+      const loader = document.getElementById("loader");
+      const video = document.getElementById("videoPlayer");
+      video.src = '';
+      video.style.display = 'none';
+
+      if (!magnetURI || !magnetURI.startsWith("magnet:")) {
+        alert("⚠️ Please enter a valid magnet link.");
         return;
       }
 
+      loader.style.display = "block";
+
       client.add(magnetURI, torrent => {
-        const file = torrent.files.find(file =>
-          file.name.endsWith('.mp4') ||
-          file.name.endsWith('.webm') ||
-          file.name.endsWith('.mkv')
+        const file = torrent.files.find(f =>
+          f.name.endsWith(".mp4") || f.name.endsWith(".mkv") || f.name.endsWith(".webm")
         );
 
-        if (file) {
-          file.renderTo('video#player');
-        } else {
-          alert('No streamable video file found in this torrent.');
+        if (!file) {
+          loader.innerText = "❌ No playable video file found in this torrent.";
+          return;
         }
+
+        file.renderTo('video#videoPlayer', {
+          autoplay: true
+        }, () => {
+          loader.style.display = "none";
+          video.style.display = 'block';
+        });
       });
     }
   </script>
