@@ -3,100 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Explorer | Discover Films Worldwide</title>
+    <title>TorrentStream - Instant Torrent Player</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet">
     <style>
-        :root {
-            --primary: #0ea5e9;
-            --primary-dark: #0284c7;
-            --secondary: #f59e0b;
-            --dark: #0f172a;
-            --darker: #020617;
-            --light: #f8fafc;
-            --gray: #94a3b8;
-            --success: #10b981;
-            --error: #ef4444;
-            --card-bg: rgba(15, 23, 42, 0.7);
-            --card-border: rgba(148, 163, 184, 0.2);
-            --transition: all 0.3s ease;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-            --radius: 12px;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --dark: #1e1e2c;
+            --darker: #141422;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --warning: #f72585;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, var(--darker), var(--dark));
             color: var(--light);
             min-height: 100vh;
-            line-height: 1.6;
-            overflow-x: hidden;
-            padding-bottom: 40px;
+            padding: 20px;
         }
 
-        /* Header & Navigation */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
         header {
-            background: rgba(2, 6, 23, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
+            padding: 20px 0;
+            margin-bottom: 30px;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-size: 1.8rem;
             font-weight: 700;
-            font-size: 1.5rem;
+            color: var(--light);
         }
 
         .logo i {
-            color: var(--primary);
+            color: var(--success);
         }
 
         nav ul {
             display: flex;
             list-style: none;
-            gap: 1.5rem;
+            gap: 20px;
         }
 
         nav a {
             color: var(--light);
             text-decoration: none;
             font-weight: 500;
-            transition: var(--transition);
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius);
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
         }
 
         nav a:hover, nav a.active {
-            background: rgba(14, 165, 233, 0.2);
+            background: rgba(67, 97, 238, 0.2);
             color: var(--primary);
         }
 
-        /* Hero Section */
         .hero {
             text-align: center;
-            padding: 4rem 1rem;
-            max-width: 800px;
-            margin: 0 auto;
+            padding: 40px 20px;
+            border-radius: 20px;
+            background: rgba(30, 30, 44, 0.7);
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--primary), var(--success));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -104,784 +101,479 @@
 
         .hero p {
             font-size: 1.2rem;
-            color: var(--gray);
-            margin-bottom: 2rem;
-        }
-
-        /* API Key Section */
-        .api-section {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius);
-            padding: 2rem;
-            margin: 2rem auto;
             max-width: 700px;
-            box-shadow: var(--shadow);
+            margin: 0 auto 30px;
+            color: #a0a0c0;
+            line-height: 1.6;
         }
 
-        .api-section h2 {
-            margin-bottom: 1.5rem;
-            color: var(--primary);
+        .input-container {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+            height: 60px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
         }
 
-        .api-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1rem;
-        }
-
-        .api-input-group input {
+        .input-container input {
             flex: 1;
-            padding: 12px 15px;
-            border-radius: var(--radius);
-            border: 1px solid var(--card-border);
-            background: rgba(15, 23, 42, 0.5);
+            padding: 0 25px;
+            font-size: 1.1rem;
+            background: rgba(20, 20, 34, 0.8);
+            border: none;
             color: var(--light);
-            font-size: 1rem;
+            outline: none;
         }
 
-        .api-input-group button {
+        .input-container button {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 0 25px;
-            border-radius: var(--radius);
-            cursor: pointer;
+            padding: 0 35px;
+            font-size: 1.1rem;
             font-weight: 600;
-            transition: var(--transition);
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .api-input-group button:hover {
+        .input-container button:hover {
             background: var(--primary-dark);
         }
 
-        .api-note {
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-top: 10px;
+        .player-container {
+            background: rgba(30, 30, 44, 0.7);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
-        .api-note a {
-            color: var(--primary);
-            text-decoration: none;
+        .player-header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(20, 20, 34, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Categories & Filters */
-        .categories-section {
-            max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 1rem;
-        }
-
-        .section-title {
+        .player-header h2 {
+            font-size: 1.5rem;
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
         }
 
-        .categories {
+        .player-header h2 i {
+            color: var(--success);
+        }
+
+        .player-actions {
             display: flex;
             gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
         }
 
-        .category {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius);
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 500;
-        }
-
-        .category:hover, .category.active {
-            background: rgba(14, 165, 233, 0.2);
-            border-color: var(--primary);
+        .player-actions button {
+            background: rgba(67, 97, 238, 0.2);
             color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .filter-group {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .filter-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        .filter-group select, .filter-group input {
-            width: 100%;
-            padding: 10px 12px;
-            border-radius: var(--radius);
-            border: 1px solid var(--card-border);
-            background: rgba(15, 23, 42, 0.5);
-            color: var(--light);
-        }
-
-        /* Movie Grid */
-        .movie-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px;
-        }
-
-        .movie-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius);
-            overflow: hidden;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-            cursor: pointer;
-        }
-
-        .movie-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-        }
-
-        .movie-poster {
-            height: 350px;
-            background: linear-gradient(45deg, var(--darker), var(--dark));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray);
-        }
-
-        .movie-poster img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .movie-info {
-            padding: 1.2rem;
-        }
-
-        .movie-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .movie-meta {
-            display: flex;
-            justify-content: space-between;
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-bottom: 12px;
-        }
-
-        .movie-rating {
-            color: var(--secondary);
-            font-weight: 600;
-        }
-
-        .movie-overview {
-            font-size: 0.9rem;
-            color: var(--gray);
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            margin-bottom: 15px;
-        }
-
-        .play-btn {
-            width: 100%;
-            padding: 8px;
-            background: var(--primary);
-            color: white;
             border: none;
-            border-radius: var(--radius);
-            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 30px;
             cursor: pointer;
-            transition: var(--transition);
+            font-weight: 500;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
         }
 
-        .play-btn:hover {
-            background: var(--primary-dark);
-        }
-
-        /* Search Section */
-        .search-section {
-            max-width: 800px;
-            margin: 3rem auto;
-            padding: 0 1rem;
-        }
-
-        .search-container {
-            position: relative;
-            margin-bottom: 2rem;
-        }
-
-        .search-container input {
-            width: 100%;
-            padding: 15px 20px;
-            padding-left: 50px;
-            border-radius: var(--radius);
-            border: 1px solid var(--card-border);
-            background: var(--card-bg);
-            color: var(--light);
-            font-size: 1.1rem;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray);
-        }
-
-        /* Community Section */
-        .community-section {
-            max-width: 800px;
-            margin: 5rem auto;
-            padding: 2rem;
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(245, 158, 11, 0.1)));
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius);
-            text-align: center;
-            box-shadow: var(--shadow);
-        }
-
-        .community-section h2 {
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-        }
-
-        .community-section p {
-            color: var(--gray);
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .telegram-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #0088cc;
+        .player-actions button:hover {
+            background: var(--primary);
             color: white;
-            padding: 12px 25px;
-            border-radius: var(--radius);
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
         }
 
-        .telegram-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 136, 204, 0.3);
+        .video-wrapper {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
         }
 
-        /* Modal */
-        .modal {
-            position: fixed;
+        #video-player {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-
-        .modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            width: 90%;
-            max-width: 900px;
-            background: var(--dark);
-            border-radius: var(--radius);
-            overflow: hidden;
-            position: relative;
-            transform: scale(0.9);
-            transition: var(--transition);
-        }
-
-        .modal.active .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: var(--transition);
-        }
-
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .trailer-container {
-            position: relative;
-            padding-top: 56.25%;
             background: #000;
         }
 
-        .trailer-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
+        .player-info {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: rgba(20, 20, 34, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Footer */
+        .info-card {
+            background: rgba(30, 30, 44, 0.6);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .info-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--success);
+        }
+
+        .file-list {
+            list-style: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .file-list li {
+            padding: 12px 15px;
+            background: rgba(20, 20, 34, 0.5);
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-list li:hover {
+            background: rgba(67, 97, 238, 0.2);
+        }
+
+        .file-list li.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: rgba(30, 30, 44, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #a0a0c0;
+            line-height: 1.6;
+        }
+
         footer {
             text-align: center;
-            padding: 2rem;
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-top: 3rem;
+            padding: 30px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a0a0c0;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .movie-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
+        .disclaimer {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            padding: 15px;
+            background: rgba(247, 37, 133, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid var(--warning);
         }
 
-        @media (max-width: 480px) {
-            .api-input-group {
-                flex-direction: column;
-            }
-            
-            .movie-grid {
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 900px) {
+            .player-info {
                 grid-template-columns: 1fr;
             }
             
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
-            .section-title {
-                font-size: 1.5rem;
+            nav ul {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
             }
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @media (max-width: 768px) {
+            .input-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .input-container input {
+                padding: 18px 20px;
+                width: 100%;
+            }
+            
+            .input-container button {
+                padding: 18px;
+                width: 100%;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .animated {
-            animation: fadeIn 0.6s ease forwards;
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .logo span {
+                display: none;
+            }
+            
+            .player-actions button span {
+                display: none;
+            }
+            
+            .player-actions button i {
+                margin-right: 0;
+            }
         }
 
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
-
-        /* Loading State */
-        .loading {
-            display: flex;
-            justify-content: center;
-            padding: 2rem;
+        /* Video.js Customization */
+        .video-js {
+            border-radius: 0 0 20px 20px;
         }
 
-        .loader {
-            width: 48px;
-            height: 48px;
-            border: 5px solid var(--primary);
-            border-bottom-color: transparent;
-            border-radius: 50%;
-            animation: rotation 1s linear infinite;
+        .vjs-big-play-button {
+            background: rgba(67, 97, 238, 0.7) !important;
+            border: none !important;
+            border-radius: 50% !important;
+            width: 80px !important;
+            height: 80px !important;
+            line-height: 80px !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%);
         }
 
-        @keyframes rotation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .vjs-control-bar {
+            background: rgba(20, 20, 34, 0.9) !important;
         }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem;
-            grid-column: 1 / -1;
-            color: var(--gray);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: var(--secondary);
+        .vjs-play-progress {
+            background: var(--success) !important;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="logo">
-            <i class="fas fa-film"></i>
-            <span>MovieExplorer</span>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#" class="active">Home</a></li>
-                <li><a href="#">Movies</a></li>
-                <li><a href="#">TV Shows</a></li>
-                <li><a href="#">About</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero animated">
-        <h1>Discover Films Worldwide</h1>
-        <p>Explore thousands of movies from Hollywood, Bollywood, South Indian cinema and more. Search, filter, and watch trailers - all in one place.</p>
-    </section>
-
-    <!-- API Key Section -->
-    <section class="api-section animated delay-1">
-        <h2><i class="fas fa-key"></i> TMDB API Key</h2>
-        <div class="api-input-group">
-            <input type="text" id="apiKey" placeholder="Enter your TMDB API key">
-            <button id="saveKey">Save Key</button>
-        </div>
-        <p class="api-note">You need a TMDB API key to access movie data. <a href="https://www.themoviedb.org/signup" target="_blank">Get your free API key</a></p>
-    </section>
-
-    <!-- Categories & Filters -->
-    <section class="categories-section animated delay-2">
-        <h2 class="section-title"><i class="fas fa-tags"></i> Browse Categories</h2>
-        <div class="categories">
-            <div class="category active">All Movies</div>
-            <div class="category">Hollywood</div>
-            <div class="category">Bollywood</div>
-            <div class="category">South Indian</div>
-            <div class="category">Action</div>
-            <div class="category">Comedy</div>
-            <div class="category">Drama</div>
-        </div>
-
-        <div class="filters">
-            <div class="filter-group">
-                <label for="yearFilter">Release Year</label>
-                <select id="yearFilter">
-                    <option value="">All Years</option>
-                    <option value="2023">2023</option>
-                    <option value="2022">2022</option>
-                    <option value="2021">2021</option>
-                    <option value="2020">2020</option>
-                </select>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-bolt"></i>
+                <span>TorrentStream</span>
             </div>
-            <div class="filter-group">
-                <label for="genreFilter">Genre</label>
-                <select id="genreFilter">
-                    <option value="">All Genres</option>
-                    <option value="28">Action</option>
-                    <option value="35">Comedy</option>
-                    <option value="18">Drama</option>
-                    <option value="10749">Romance</option>
-                    <option value="53">Thriller</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="ratingFilter">Minimum Rating</label>
-                <select id="ratingFilter">
-                    <option value="0">Any Rating</option>
-                    <option value="7">7+</option>
-                    <option value="8">8+</option>
-                    <option value="9">9+</option>
-                </select>
-            </div>
-        </div>
-    </section>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </header>
 
-    <!-- Movie Grid -->
-    <section class="movie-grid">
-        <!-- Movies will be dynamically inserted here -->
-        <div class="movie-card animated delay-3">
-            <div class="movie-poster">
-                <i class="fas fa-image fa-3x"></i>
-            </div>
-            <div class="movie-info">
-                <h3 class="movie-title">Movie Title</h3>
-                <div class="movie-meta">
-                    <span class="movie-year">2023</span>
-                    <span class="movie-rating">★ 7.8</span>
+        <main>
+            <section class="hero">
+                <h1>Instant Torrent Streaming</h1>
+                <p>Stream videos directly from torrent links without downloading. Supports all popular video formats with lightning-fast playback.</p>
+                
+                <div class="input-container">
+                    <input type="text" id="torrent-input" placeholder="Enter magnet link or torrent file...">
+                    <button id="play-btn">
+                        <i class="fas fa-play"></i> Stream Now
+                    </button>
                 </div>
-                <p class="movie-overview">This is a brief description of the movie plot. It will be truncated after a few lines.</p>
-                <button class="play-btn"><i class="fas fa-play"></i> Play Trailer</button>
-            </div>
-        </div>
-
-        <div class="movie-card animated delay-4">
-            <div class="movie-poster">
-                <i class="fas fa-image fa-3x"></i>
-            </div>
-            <div class="movie-info">
-                <h3 class="movie-title">Another Movie</h3>
-                <div class="movie-meta">
-                    <span class="movie-year">2022</span>
-                    <span class="movie-rating">★ 8.2</span>
+                
+                <div class="disclaimer">
+                    <i class="fas fa-exclamation-triangle"></i> This tool is for legal content only. By using this service, you agree to comply with local copyright laws.
                 </div>
-                <p class="movie-overview">This is a brief description of the movie plot. It will be truncated after a few lines.</p>
-                <button class="play-btn"><i class="fas fa-play"></i> Play Trailer</button>
-            </div>
-        </div>
+            </section>
 
-        <div class="movie-card animated delay-5">
-            <div class="movie-poster">
-                <i class="fas fa-image fa-3x"></i>
-            </div>
-            <div class="movie-info">
-                <h3 class="movie-title">Popular Film</h3>
-                <div class="movie-meta">
-                    <span class="movie-year">2023</span>
-                    <span class="movie-rating">★ 9.1</span>
+            <section class="player-container">
+                <div class="player-header">
+                    <h2><i class="fas fa-play-circle"></i> Torrent Player</h2>
+                    <div class="player-actions">
+                        <button id="report-btn">
+                            <i class="fas fa-flag"></i> <span>Report Issue</span>
+                        </button>
+                        <button id="favorite-btn">
+                            <i class="fas fa-star"></i> <span>Add to Favorites</span>
+                        </button>
+                    </div>
                 </div>
-                <p class="movie-overview">This is a brief description of the movie plot. It will be truncated after a few lines.</p>
-                <button class="play-btn"><i class="fas fa-play"></i> Play Trailer</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Search Section -->
-    <section class="search-section animated">
-        <h2 class="section-title"><i class="fas fa-search"></i> Find Movies</h2>
-        <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" id="searchInput" placeholder="Search for movies...">
-        </div>
-    </section>
-
-    <!-- Community Section -->
-    <section class="community-section animated">
-        <h2><i class="fab fa-telegram"></i> Join Our Community</h2>
-        <p>Connect with fellow movie enthusiasts! Join our Telegram group to discuss the latest releases, share recommendations, and get updates about our platform.</p>
-        <a href="https://t.me/movieexplorergroup" target="_blank" class="telegram-btn">
-            <i class="fab fa-telegram"></i> Join Telegram Group
-        </a>
-    </section>
-
-    <!-- Trailer Modal -->
-    <div class="modal" id="trailerModal">
-        <div class="modal-content">
-            <div class="modal-close">
-                <i class="fas fa-times"></i>
-            </div>
-            <div class="trailer-container">
-                <iframe id="trailerFrame" src="" allowfullscreen></iframe>
-            </div>
-        </div>
+                
+                <div class="video-wrapper">
+                    <video id="video-player" class="video-js vjs-default-skin" controls preload="auto">
+                        <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+                    </video>
+                </div>
+                
+                <div class="player-info">
+                    <div class="info-card">
+                        <h3><i class="fas fa-info-circle"></i> Torrent Information</h3>
+                        <p><strong>Title:</strong> Oceans.mp4</p>
+                        <p><strong>Size:</strong> 12.4 MB</p>
+                        <p><strong>Seeds:</strong> 24</p>
+                        <p><strong>Peers:</strong> 8</p>
+                        <p><strong>Status:</strong> <span class="status">Streaming</span></p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3><i class="fas fa-file-video"></i> Available Files</h3>
+                        <ul class="file-list">
+                            <li class="active">Oceans.mp4 (Video)</li>
+                            <li>Sample.srt (Subtitles)</li>
+                            <li>Cover.jpg (Image)</li>
+                            <li>Readme.txt (Text)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="features">
+                <div class="feature-card">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Instant Playback</h3>
+                    <p>Start watching videos immediately without waiting for the entire download to complete. Our streaming technology buffers content in real-time.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile Optimized</h3>
+                    <p>Enjoy seamless streaming on any device. Our responsive design works perfectly on smartphones, tablets, and desktops.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-file-video"></i>
+                    <h3>Format Support</h3>
+                    <p>Supports all popular video formats including MP4, MKV, AVI, MOV, and more. Automatic format detection ensures compatibility.</p>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2023 TorrentStream. For demonstration purposes only.</p>
+            <p>This interface simulates a torrent streaming player. Actual implementation requires backend infrastructure.</p>
+        </footer>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <p>MovieExplorer &copy; 2023 | Powered by TMDB API</p>
-    </footer>
-
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // API Key Handling
-            const apiKeyInput = document.getElementById('apiKey');
-            const saveKeyBtn = document.getElementById('saveKey');
+        // Initialize Video.js player
+        const player = videojs('video-player', {
+            controls: true,
+            autoplay: false,
+            preload: 'auto',
+            responsive: true,
+            fluid: true,
+            playbackRates: [0.5, 1, 1.5, 2]
+        });
+
+        // Simulate torrent input and playback
+        document.getElementById('play-btn').addEventListener('click', function() {
+            const torrentInput = document.getElementById('torrent-input');
+            const torrentValue = torrentInput.value.trim();
             
-            // Check if API key is already saved
-            const savedKey = localStorage.getItem('tmdb_api_key');
-            if (savedKey) {
-                apiKeyInput.value = savedKey;
-            }
-            
-            saveKeyBtn.addEventListener('click', function() {
-                const key = apiKeyInput.value.trim();
-                if (key) {
-                    localStorage.setItem('tmdb_api_key', key);
-                    alert('API key saved successfully!');
-                } else {
-                    alert('Please enter a valid API key');
-                }
-            });
-            
-            // Category selection
-            const categories = document.querySelectorAll('.category');
-            categories.forEach(category => {
-                category.addEventListener('click', function() {
-                    document.querySelector('.category.active').classList.remove('active');
-                    this.classList.add('active');
-                    // In a real app, this would filter movies
-                });
-            });
-            
-            // Filter change handlers
-            const filters = ['yearFilter', 'genreFilter', 'ratingFilter'];
-            filters.forEach(filterId => {
-                document.getElementById(filterId).addEventListener('change', function() {
-                    // In a real app, this would trigger movie filtering
-                    console.log(`Filter changed: ${this.value}`);
-                });
-            });
-            
-            // Search functionality
-            const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    const query = this.value.trim();
-                    if (query) {
-                        // In a real app, this would search movies
-                        console.log(`Searching for: ${query}`);
-                    }
-                }
-            });
-            
-            // Trailer modal functionality
-            const modal = document.getElementById('trailerModal');
-            const trailerFrame = document.getElementById('trailerFrame');
-            const closeModal = document.querySelector('.modal-close');
-            const playButtons = document.querySelectorAll('.play-btn');
-            
-            playButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // In a real app, this would fetch the trailer key from TMDB
-                    const trailerKey = 'dQw4w9WgXcQ'; // Example key
-                    trailerFrame.src = `https://www.youtube.com/embed/${trailerKey}?autoplay=1`;
-                    modal.classList.add('active');
-                });
-            });
-            
-            closeModal.addEventListener('click', function() {
-                modal.classList.remove('active');
-                trailerFrame.src = '';
-            });
-            
-            // Close modal when clicking outside content
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                    trailerFrame.src = '';
-                }
-            });
-            
-            // Responsive menu toggle (for smaller screens)
-            const menuToggle = document.createElement('div');
-            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-            menuToggle.classList.add('menu-toggle');
-            document.querySelector('header').appendChild(menuToggle);
-            
-            menuToggle.addEventListener('click', function() {
-                document.querySelector('nav').classList.toggle('active');
-            });
-            
-            // Demo movie data (in a real app, this would come from TMDB API)
-            const demoMovies = [
-                {
-                    title: "Avengers: Endgame",
-                    year: 2019,
-                    rating: 8.4,
-                    overview: "After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.",
-                    poster: "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg"
-                },
-                {
-                    title: "Inception",
-                    year: 2010,
-                    rating: 8.8,
-                    overview: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
-                    poster: "https://image.tmdb.org/t/p/w500/edv5CZvWj09upOsy2Y6IwDhK8bt.jpg"
-                },
-                {
-                    title: "The Dark Knight",
-                    year: 2008,
-                    rating: 9.0,
-                    overview: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
-                    poster: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
-                }
-            ];
-            
-            // Populate movie cards with demo data
-            const movieCards = document.querySelectorAll('.movie-card');
-            movieCards.forEach((card, index) => {
-                if (demoMovies[index]) {
-                    const movie = demoMovies[index];
-                    card.querySelector('.movie-title').textContent = movie.title;
-                    card.querySelector('.movie-year').textContent = movie.year;
-                    card.querySelector('.movie-rating').textContent = `★ ${movie.rating}`;
-                    card.querySelector('.movie-overview').textContent = movie.overview;
+            if(torrentValue) {
+                // Show loading state
+                const status = document.querySelector('.status');
+                status.textContent = 'Loading...';
+                status.style.color = '#f72585';
+                
+                // Simulate loading delay
+                setTimeout(() => {
+                    status.textContent = 'Streaming';
+                    status.style.color = '#4cc9f0';
                     
-                    if (movie.poster) {
-                        const posterDiv = card.querySelector('.movie-poster');
-                        posterDiv.innerHTML = '';
-                        const img = document.createElement('img');
-                        img.src = movie.poster;
-                        img.alt = movie.title;
-                        posterDiv.appendChild(img);
-                    }
-                }
+                    // For demo purposes, always play the sample video
+                    player.src({ type: 'video/mp4', src: 'https://vjs.zencdn.net/v/oceans.mp4' });
+                    player.play();
+                    
+                    // Scroll to player
+                    document.querySelector('.player-container').scrollIntoView({ behavior: 'smooth' });
+                }, 1500);
+            } else {
+                alert('Please enter a valid magnet link or torrent file');
+                torrentInput.focus();
+            }
+        });
+
+        // Favorite button functionality
+        document.getElementById('favorite-btn').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-star"></i> Added to Favorites';
+            this.style.background = '#7209b7';
+            
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-star"></i> <span>Add to Favorites</span>';
+                this.style.background = '';
+            }, 2000);
+        });
+
+        // Report button functionality
+        document.getElementById('report-btn').addEventListener('click', function() {
+            alert('Issue reported. Our team will look into this shortly.');
+        });
+
+        // File selection functionality
+        const fileItems = document.querySelectorAll('.file-list li');
+        fileItems.forEach(item => {
+            item.addEventListener('click', function() {
+                fileItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
             });
         });
     </script>
